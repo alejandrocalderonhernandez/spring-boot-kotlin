@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:latest
+    container_name: MyPostgreSQL
+    restart: always
+    hostname: postgresql
+    volumes:
+      - ~/Documents/docker-vol/postgres-volume/data:/var/lib/postgresql/data
+      - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    environment:
+      - POSTGRES_DB: postgresdb
+      - POSTGRES_USER: master
+      - POSGRES_PASSWORD: pas1234
+    ports:
+      - "5432:5432"
+    command: []
