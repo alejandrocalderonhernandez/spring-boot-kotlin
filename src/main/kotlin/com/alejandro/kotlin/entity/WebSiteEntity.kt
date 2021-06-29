@@ -15,6 +15,9 @@ data class WebSiteEntity(
         @Enumerated(value = EnumType.STRING)
         val category: Category,
         @Column
-        val description: String
+        val description: String,
+        @ManyToOne
+        @JoinColumn(name = "id_company")
+        val company: CompanyEntity
 ) {
 }

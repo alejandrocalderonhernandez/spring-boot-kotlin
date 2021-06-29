@@ -1,5 +1,8 @@
 package com.alejandro.kotlin.entity
 
+import com.alejandro.kotlin.util.json.JsonToString
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -16,7 +19,10 @@ data class CompanyEntity(
         @Column
         val logo: String,
         @Column(name = "foundation_date")
-        val foundationDate: LocalDate
+        val foundationDate: LocalDate,
+        @JsonIgnoreProperties(value = ["company"], allowSetters = true)
+        @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], orphanRemoval = true)
+        val webSites: MutableSet<WebSiteEntity>
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -35,5 +41,9 @@ data class CompanyEntity(
         var result = id.hashCode()
         result = 31 * result + name.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return JsonToString.buildJsonString(this)
     }
 }
