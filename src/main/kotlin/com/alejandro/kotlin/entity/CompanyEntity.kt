@@ -1,13 +1,18 @@
 package com.alejandro.kotlin.entity
 
+import com.alejandro.kotlin.NoArgs
+import com.alejandro.kotlin.dto.CompanyDto
+import com.alejandro.kotlin.util.json.DtoEntityMapper
 import com.alejandro.kotlin.util.json.JsonToString
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import java.io.Serializable
 import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
 @Table(name = "company")
+@NoArgs
 data class CompanyEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +28,7 @@ data class CompanyEntity(
         @JsonIgnoreProperties(value = ["company"], allowSetters = true)
         @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], orphanRemoval = true)
         val webSites: MutableSet<WebSiteEntity>
-) {
+): Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -45,5 +50,9 @@ data class CompanyEntity(
 
     override fun toString(): String {
         return JsonToString.buildJsonString(this)
+    }
+
+    fun toDto(): CompanyDto {
+        return DtoEntityMapper.mapTo(this, CompanyDto::class.java) as CompanyDto
     }
 }

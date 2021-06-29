@@ -1,6 +1,8 @@
 package com.alejandro.kotlin.business.company
 
 import com.alejandro.kotlin.SpringKotlinExampleApplication
+import com.alejandro.kotlin.dto.CompanyDto
+import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.repository.CompanyRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +15,10 @@ class CompanyBusinessImpl(@Autowired val companyRepo: CompanyRepository): Compan
 
     override fun findById(id: Long): String {
         logger.info("Find: {}", this.companyRepo.findAll().toString())
+
+        this.companyRepo.findAll().forEach{
+           print(it.toDto().toString())
+        }
         return "Hello this is a test"
     }
 }

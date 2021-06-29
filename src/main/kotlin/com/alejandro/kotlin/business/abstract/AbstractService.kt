@@ -1,5 +1,5 @@
 package com.alejandro.kotlin.business.abstract
 
-abstract interface AbstractService<T> {
-    fun findById(id: Long): T
+abstract interface AbstractService<E,ID> {
+    fun findById(id: ID): E
 }
