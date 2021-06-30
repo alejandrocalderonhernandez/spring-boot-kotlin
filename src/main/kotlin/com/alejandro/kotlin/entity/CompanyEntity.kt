@@ -18,13 +18,13 @@ data class CompanyEntity(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long,
         @Column
-        val name: String,
+        var name: String,
         @Column
-        val founder: String,
+        var founder: String,
         @Column
         val logo: String,
         @Column(name = "foundation_date")
-        val foundationDate: LocalDate,
+        var foundationDate: LocalDate,
         @JsonIgnoreProperties(value = ["company"], allowSetters = true)
         @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], orphanRemoval = true)
         val webSites: MutableSet<WebSiteEntity>

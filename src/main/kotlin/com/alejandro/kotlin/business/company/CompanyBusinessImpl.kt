@@ -6,19 +6,61 @@ import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.repository.CompanyRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 
 @Service
-class CompanyBusinessImpl(@Autowired val companyRepo: CompanyRepository): CompanyBusiness {
+class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): CompanyBusiness {
 
     private val logger = LoggerFactory.getLogger(SpringKotlinExampleApplication::class.java)
 
-    override fun findById(id: Long): String {
-        logger.info("Find: {}", this.companyRepo.findAll().toString())
-
-        this.companyRepo.findAll().forEach{
-           print(it.toDto().toString())
+    override fun findById(id: Long): CompanyDto {
+        if(this.companyRepository.existsById(id)) {
+            val response = this.companyRepository.getById(id)
+            logger.info("Find by id: {}",response.toString())
+            return response.toDto()
         }
-        return "Hello this is a test"
+        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+    }
+
+    override fun findByPage(page: Int, itemsPerPage: Int): Page<CompanyDto> {
+        if(this.companyRepository.count() > 0) {
+            val pageSortedByName: Pageable = PageRequest.of(page, itemsPerPage, Sort.by("name"));
+            val response: List<CompanyDto> =
+                this.companyRepository.findAll(pageSortedByName)
+                    .stream()
+                    .map { e -> e.toDto() }
+                    .collect(Collectors.toList())
+            logger.info("Find by page: {}", response.toString())
+            return PageImpl<CompanyDto>(response)
+        }
+        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+    }
+
+    override fun create(element: CompanyDto): CompanyDto {
+        logger.info("Created: {}", element.toString())
+        return this.companyRepository.save(element.toEntity()).toDto()
+    }
+
+    override fun update(id: Long, element: CompanyDto): CompanyDto {
+        if(this.companyRepository.existsById(id)) {
+            val toUpdate: CompanyEntity = this.companyRepository.getById(id)
+            toUpdate.name = element.name
+            toUpdate.founder = element.founder
+            toUpdate.foundationDate = element.foundationDate
+            toUpdate.founder = element.founder
+            logger.info("Updated: {}", toUpdate.toString())
+            return this.companyRepository.save(element.toEntity()).toDto()
+        }
+        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+    }
+
+    override fun delete(id: Long): Unit {
+        if (this.companyRepository.existsById(id)) {
+            logger.info("Deleted element with id: {}", id)
+            this.companyRepository.deleteById(id)
+        }
+        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 }
