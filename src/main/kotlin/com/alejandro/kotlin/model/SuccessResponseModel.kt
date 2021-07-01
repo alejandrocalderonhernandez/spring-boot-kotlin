@@ -1,6 +1,6 @@
 package com.alejandro.kotlin.model
 
-data class SuccessResponse<T>(
+data class SuccessResponseModel<T>(
         override val code: Int,
         override val message:String,
         val data: T

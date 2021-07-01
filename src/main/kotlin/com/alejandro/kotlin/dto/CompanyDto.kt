@@ -4,6 +4,7 @@ import com.alejandro.kotlin.NoArgs
 import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.util.json.DtoEntityMapper
 import com.alejandro.kotlin.util.json.JsonToString
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 import java.time.LocalDate
 
@@ -14,6 +15,7 @@ data class CompanyDto(
     val founder: String,
     val logo: String,
     val foundationDate: LocalDate,
+    @JsonIgnoreProperties(value = ["company"], allowSetters = true)
     val webSites: MutableSet<WebSiteDto>
 ) : Serializable {
 

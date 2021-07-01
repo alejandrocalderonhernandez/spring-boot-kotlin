@@ -24,23 +24,25 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 
-    override fun findByPage(page: Int, itemsPerPage: Int): Page<CompanyDto> {
+    override fun findByPage(pageNumber: Int, elementForPage: Int): Page<CompanyDto> {
         if(this.companyRepository.count() > 0) {
-            val pageSortedByName: Pageable = PageRequest.of(page, itemsPerPage, Sort.by("name"));
+            val pageSortedByName: Pageable = PageRequest.of(pageNumber, elementForPage, Sort.by("name"));
             val response: List<CompanyDto> =
                 this.companyRepository.findAll(pageSortedByName)
                     .stream()
                     .map { e -> e.toDto() }
                     .collect(Collectors.toList())
             logger.info("Find by page: {}", response.toString())
-            return PageImpl<CompanyDto>(response)
+            return PageImpl(response)
         }
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 
     override fun create(element: CompanyDto): CompanyDto {
-        logger.info("Created: {}", element.toString())
-        return this.companyRepository.save(element.toEntity()).toDto()
+        val entity:CompanyEntity = element.toEntity()
+        entity.addWebSites()
+        logger.info("Created: {}", entity.toString())
+        return this.companyRepository.save(entity).toDto()
     }
 
     override fun update(id: Long, element: CompanyDto): CompanyDto {
@@ -63,4 +65,6 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
         }
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
+
+
 }

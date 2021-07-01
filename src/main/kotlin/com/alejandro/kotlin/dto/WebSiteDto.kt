@@ -1,8 +1,10 @@
 package com.alejandro.kotlin.dto
 
 import com.alejandro.kotlin.NoArgs
+import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.entity.WebSiteEntity
 import com.alejandro.kotlin.util.data.Category
+import com.alejandro.kotlin.util.json.DtoEntityMapper
 import com.alejandro.kotlin.util.json.JsonToString
 import java.io.Serializable
 
@@ -12,7 +14,7 @@ data class WebSiteDto(
     val name: String,
     val category: Category,
     val description: String,
-    val company: CompanyDto
+    var company: CompanyDto?
 ): Serializable {
 
     override fun equals(other: Any?): Boolean {
@@ -35,5 +37,9 @@ data class WebSiteDto(
 
     override fun toString(): String {
         return JsonToString.buildJsonString(this)
+    }
+
+    fun toEntity(): WebSiteEntity {
+        return DtoEntityMapper.mapTo(this, WebSiteEntity::class.java) as WebSiteEntity
     }
 }
