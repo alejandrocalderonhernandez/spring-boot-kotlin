@@ -1,10 +1,8 @@
 package com.alejandro.kotlin.entity
 
-import com.alejandro.kotlin.NoArgs
+import com.alejandro.kotlin.util.annotation.NoArgs
 import com.alejandro.kotlin.util.data.Category
 import com.alejandro.kotlin.util.json.JsonToString
-import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
 import java.io.Serializable
 import javax.persistence.*
 

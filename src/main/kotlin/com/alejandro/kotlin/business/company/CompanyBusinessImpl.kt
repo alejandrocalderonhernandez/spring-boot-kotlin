@@ -48,12 +48,11 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
     override fun update(id: Long, element: CompanyDto): CompanyDto {
         if(this.companyRepository.existsById(id)) {
             val toUpdate: CompanyEntity = this.companyRepository.getById(id)
-            toUpdate.name = element.name
             toUpdate.founder = element.founder
+            toUpdate.logo = element.logo
             toUpdate.foundationDate = element.foundationDate
-            toUpdate.founder = element.founder
             logger.info("Updated: {}", toUpdate.toString())
-            return this.companyRepository.save(element.toEntity()).toDto()
+            return this.companyRepository.save(toUpdate).toDto()
         }
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
@@ -62,8 +61,10 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
         if (this.companyRepository.existsById(id)) {
             logger.info("Deleted element with id: {}", id)
             this.companyRepository.deleteById(id)
+        } else {
+            throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
         }
-        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+
     }
 
 

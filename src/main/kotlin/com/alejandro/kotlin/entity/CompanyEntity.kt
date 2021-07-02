@@ -1,30 +1,30 @@
 package com.alejandro.kotlin.entity
 
-import com.alejandro.kotlin.NoArgs
+import com.alejandro.kotlin.util.annotation.NoArgs
 import com.alejandro.kotlin.dto.CompanyDto
-import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.util.json.DtoEntityMapper
 import com.alejandro.kotlin.util.json.JsonToString
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 import java.time.LocalDate
-import javax.annotation.PostConstruct
 import javax.persistence.*
 
 @Entity
-@Table(name = "company")
+@Table(
+    name = "company",
+    //indexes = [{@Index(name = "", columnList = [], unique = true)}]
+)
 @NoArgs
 data class CompanyEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long,
-        @Column
+        @Column(unique = true)
         var name: String,
         @Column
         var founder: String,
         @Column
-        val logo: String,
+        var logo: String,
         @Column(name = "foundation_date")
         var foundationDate: LocalDate,
         @JsonIgnoreProperties(value = ["company"], allowSetters = true)

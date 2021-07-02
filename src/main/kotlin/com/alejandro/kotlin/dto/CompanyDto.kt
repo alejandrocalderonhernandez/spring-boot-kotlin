@@ -1,6 +1,6 @@
 package com.alejandro.kotlin.dto
 
-import com.alejandro.kotlin.NoArgs
+import com.alejandro.kotlin.util.annotation.NoArgs
 import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.util.json.DtoEntityMapper
 import com.alejandro.kotlin.util.json.JsonToString
@@ -10,13 +10,13 @@ import java.time.LocalDate
 
 @NoArgs
 data class CompanyDto(
-    val id: Long,
-    val name: String,
-    val founder: String,
-    val logo: String,
+    var id: Long,
+    var name: String,
+    var founder: String,
+    var logo: String,
     val foundationDate: LocalDate,
     @JsonIgnoreProperties(value = ["company"], allowSetters = true)
-    val webSites: MutableSet<WebSiteDto>
+    var webSites: MutableSet<WebSiteDto>
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

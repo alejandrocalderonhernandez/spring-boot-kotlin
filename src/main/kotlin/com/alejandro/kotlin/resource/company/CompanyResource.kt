@@ -2,7 +2,8 @@ package com.alejandro.kotlin.resource.company
 
 import com.alejandro.kotlin.business.company.CompanyBusiness
 import com.alejandro.kotlin.dto.CompanyDto
-import com.alejandro.kotlin.model.SuccessResponseModel
+import com.alejandro.kotlin.model.ResponseModel
+import com.alejandro.kotlin.util.functions.AbstractFunctions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
@@ -12,46 +13,45 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping(path = ["v1/company"])
 class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
 
+    val successBuilder =
+        AbstractFunctions.ResponseBuilder<CompanyDto> { ResponseModel(200, "Success", it) }
+
     @GetMapping(path = ["{id}"])
-    fun getById(@PathVariable id: Long): ResponseEntity<SuccessResponseModel<CompanyDto?>> {
+    fun getById(@PathVariable id: Long): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
-            SuccessResponseModel(
-                200,
-                "Success",
-                this.companyBusiness.findById(id)))
+            this.companyBusiness.findById(id)?.let { successBuilder.build(it) }
+        )
     }
 
     @GetMapping
-    fun getByPage(@RequestParam page: Int, @RequestParam itemsPerPage: Int): ResponseEntity<SuccessResponseModel<Page<CompanyDto>>> {
+    fun getByPage(@RequestParam page: Int, @RequestParam itemsPerPage: Int): ResponseEntity<ResponseModel<Page<CompanyDto>>> {
         return ResponseEntity.ok(
-            SuccessResponseModel(
+            ResponseModel(
                 200,
                 "Success",
                 this.companyBusiness.findByPage(page, itemsPerPage)))
     }
 
     @PostMapping
-    fun post(@RequestBody companyDto: CompanyDto): ResponseEntity<SuccessResponseModel<CompanyDto>> {
+    fun post(@RequestBody companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
-            SuccessResponseModel(
-                200,
-                "Success",
-                this.companyBusiness.create(companyDto)))
+            this.companyBusiness.create(companyDto).let { successBuilder.build(it) }
+        )
     }
 
     @PutMapping(path = ["{id}"])
-    fun put(@RequestParam id:Long, @RequestBody companyDto: CompanyDto): ResponseEntity<SuccessResponseModel<CompanyDto>> {
+    fun put(@PathVariable id:Long, @RequestBody companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
-            SuccessResponseModel(
+            ResponseModel(
                 200,
                 "Success",
                 this.companyBusiness.update(id, companyDto)))
     }
 
     @DeleteMapping(path = ["{id}"])
-    fun delete(@RequestParam id:Long): ResponseEntity<SuccessResponseModel<Unit>> {
+    fun delete(@PathVariable id:Long): ResponseEntity<ResponseModel<Unit>> {
         return ResponseEntity.ok(
-            SuccessResponseModel(
+            ResponseModel(
                 200,
                 "Success",
                 this.companyBusiness.delete(id)))

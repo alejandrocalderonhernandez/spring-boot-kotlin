@@ -1,7 +1,6 @@
 package com.alejandro.kotlin.dto
 
-import com.alejandro.kotlin.NoArgs
-import com.alejandro.kotlin.entity.CompanyEntity
+import com.alejandro.kotlin.util.annotation.NoArgs
 import com.alejandro.kotlin.entity.WebSiteEntity
 import com.alejandro.kotlin.util.data.Category
 import com.alejandro.kotlin.util.json.DtoEntityMapper
