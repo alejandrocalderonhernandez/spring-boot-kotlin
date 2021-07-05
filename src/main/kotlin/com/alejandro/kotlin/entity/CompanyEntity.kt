@@ -10,10 +10,7 @@ import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
-@Table(
-    name = "company",
-    //indexes = [{@Index(name = "", columnList = [], unique = true)}]
-)
+@Table(name = "company")
 @NoArgs
 data class CompanyEntity(
         @Id
@@ -58,13 +55,15 @@ data class CompanyEntity(
         return DtoEntityMapper.mapTo(this, CompanyDto::class.java) as CompanyDto
     }
 
-    fun addWebSites(): Unit {
-        this.webSites.forEach{ws -> print(ws)}
-        this.webSites.forEach{ws -> ws.company = this}
+    fun addWebSite(webSite: WebSiteEntity): Unit {
+        this.webSites.add(webSite)
     }
 
     fun removeWebSite(webSite: WebSiteEntity): Unit {
-        this.webSites.removeIf{ ws -> ws.id == webSite.id }
-        webSite.company = this
+        this.webSites.remove(webSite)
+    }
+
+    fun updateWebSites(): Unit {
+        this.webSites.forEach{ws -> ws.company = this}
     }
 }

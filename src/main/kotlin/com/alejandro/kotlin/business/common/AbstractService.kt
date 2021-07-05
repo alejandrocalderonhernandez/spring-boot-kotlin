@@ -1,8 +1,9 @@
-package com.alejandro.kotlin.business.abstract
+package com.alejandro.kotlin.business.common
 
 import org.springframework.data.domain.Page
+import java.io.Serializable
 
-abstract interface AbstractService<E,ID> {
+abstract interface AbstractService<E: Serializable,ID> {
 
     fun findById(id: ID): E?
 
@@ -10,7 +11,7 @@ abstract interface AbstractService<E,ID> {
 
     fun create(element: E): E
 
-    fun update(id: ID,element: E): E
+    fun update(id: ID, element: E): E
 
     fun delete(id: ID): Unit
 }

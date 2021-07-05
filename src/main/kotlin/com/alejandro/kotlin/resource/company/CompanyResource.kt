@@ -2,6 +2,7 @@ package com.alejandro.kotlin.resource.company
 
 import com.alejandro.kotlin.business.company.CompanyBusiness
 import com.alejandro.kotlin.dto.CompanyDto
+import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.model.ResponseModel
 import com.alejandro.kotlin.util.functions.AbstractFunctions
 import org.springframework.beans.factory.annotation.Autowired
@@ -55,5 +56,19 @@ class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
                 200,
                 "Success",
                 this.companyBusiness.delete(id)))
+    }
+
+    @PatchMapping(path = ["add/{id}"])
+    fun patchAddWebSites(@PathVariable id: Long,
+                         @RequestBody webSites: Collection<WebSiteDto>): ResponseEntity<ResponseModel<CompanyDto>> {
+        return ResponseEntity.ok(
+            this.companyBusiness.addWebSites(id, webSites).let { successBuilder.build(it) })
+    }
+
+    @PatchMapping(path = ["remove/{id}"])
+    fun patchRemoveWebSites(@PathVariable id: Long,
+                         @RequestBody webSites: Collection<WebSiteDto>): ResponseEntity<ResponseModel<CompanyDto>> {
+        return ResponseEntity.ok(
+            this.companyBusiness.removeWebSites(id, webSites).let { successBuilder.build(it) })
     }
 }

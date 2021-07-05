@@ -2,15 +2,18 @@ package com.alejandro.kotlin.business.company
 
 import com.alejandro.kotlin.SpringKotlinExampleApplication
 import com.alejandro.kotlin.dto.CompanyDto
+import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.repository.CompanyRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.stream.Collectors
 
 @Service
+@Transactional
 class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): CompanyBusiness {
 
     private val logger = LoggerFactory.getLogger(SpringKotlinExampleApplication::class.java)
@@ -40,7 +43,7 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
 
     override fun create(element: CompanyDto): CompanyDto {
         val entity:CompanyEntity = element.toEntity()
-        entity.addWebSites()
+        entity.updateWebSites()
         logger.info("Created: {}", entity.toString())
         return this.companyRepository.save(entity).toDto()
     }
@@ -54,7 +57,7 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
             logger.info("Updated: {}", toUpdate.toString())
             return this.companyRepository.save(toUpdate).toDto()
         }
-        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+        throw NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 
     override fun delete(id: Long): Unit {
@@ -64,8 +67,35 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
         } else {
             throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
         }
-
     }
 
+    override fun addWebSites(id: Long, webSites: Collection<WebSiteDto>): CompanyDto {
+        if (this.companyRepository.existsById(id)) {
+            val toUpdate: CompanyEntity = this.companyRepository.getById(id)
+            webSites.forEach {ws ->  toUpdate.addWebSite(ws.toEntity())}
+            toUpdate.updateWebSites()
+            return this.companyRepository.save(toUpdate).toDto()
+        }
+        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+    }
 
+    override fun removeWebSites(id: Long, webSites: Collection<WebSiteDto>): CompanyDto {
+        if (this.companyRepository.existsById(id)) {
+            val toUpdate: CompanyEntity = this.companyRepository.getById(id)
+
+            println("before")
+            println(toUpdate.webSites.size)
+
+
+            webSites.forEach {ws ->
+                toUpdate.removeWebSite(ws.toEntity())
+            }
+
+            println("after")
+            println(toUpdate.webSites.size)
+            toUpdate.updateWebSites()
+            return this.companyRepository.save(toUpdate).toDto()
+        }
+        throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+    }
 }
