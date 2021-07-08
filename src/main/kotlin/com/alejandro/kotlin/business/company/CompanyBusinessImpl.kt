@@ -1,20 +1,28 @@
 package com.alejandro.kotlin.business.company
 
 import com.alejandro.kotlin.SpringKotlinExampleApplication
+import com.alejandro.kotlin.component.common.FileComponent
 import com.alejandro.kotlin.dto.CompanyDto
 import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.repository.CompanyRepository
+import com.alejandro.kotlin.util.constants.MyConstants
+import com.alejandro.kotlin.util.normalize.Normalizer
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 import java.util.stream.Collectors
 
 @Service
 @Transactional
-class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): CompanyBusiness {
+class CompanyBusinessImpl @Autowired constructor(
+    val companyRepository: CompanyRepository,
+    @Qualifier(value = "img")
+    val fileComponent: FileComponent): CompanyBusiness {
 
     private val logger = LoggerFactory.getLogger(SpringKotlinExampleApplication::class.java)
 
@@ -41,9 +49,16 @@ class CompanyBusinessImpl(@Autowired val companyRepository: CompanyRepository): 
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 
-    override fun create(element: CompanyDto): CompanyDto {
+    override fun create(element: CompanyDto, img: MultipartFile?): CompanyDto {
         val entity:CompanyEntity = element.toEntity()
         entity.updateWebSites()
+        if (img !== null) {
+            val nameImg: String? = img.originalFilename?.let { Normalizer.normalizeImgName(it) }
+            if (nameImg != null) {
+                entity.logo = MyConstants.IMG_BASE_URL + nameImg
+                this.fileComponent.save(img, nameImg)
+            }
+        }
         logger.info("Created: {}", entity.toString())
         return this.companyRepository.save(entity).toDto()
     }

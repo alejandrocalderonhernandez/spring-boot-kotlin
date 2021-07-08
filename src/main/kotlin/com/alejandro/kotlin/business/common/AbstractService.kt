@@ -1,6 +1,7 @@
 package com.alejandro.kotlin.business.common
 
 import org.springframework.data.domain.Page
+import org.springframework.web.multipart.MultipartFile
 import java.io.Serializable
 
 abstract interface AbstractService<E: Serializable,ID> {
@@ -9,7 +10,7 @@ abstract interface AbstractService<E: Serializable,ID> {
 
     fun findByPage(pageNumber: Int, elementForPage: Int): Page<E>
 
-    fun create(element: E): E
+    fun create(element: E, file: MultipartFile?): E
 
     fun update(id: ID, element: E): E
 

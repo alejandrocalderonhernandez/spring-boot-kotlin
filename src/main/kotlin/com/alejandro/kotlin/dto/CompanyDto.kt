@@ -3,7 +3,7 @@ package com.alejandro.kotlin.dto
 import com.alejandro.kotlin.util.annotation.NoArgs
 import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.util.json.DtoEntityMapper
-import com.alejandro.kotlin.util.json.JsonToString
+import com.alejandro.kotlin.util.json.JsonMap
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 import java.time.LocalDate
@@ -38,7 +38,7 @@ data class CompanyDto(
     }
 
     override fun toString(): String {
-        return JsonToString.buildJsonString(this)
+        return JsonMap.buildFromModel(this)
     }
 
     fun toEntity(): CompanyEntity {

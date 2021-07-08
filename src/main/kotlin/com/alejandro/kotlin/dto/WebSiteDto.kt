@@ -4,7 +4,7 @@ import com.alejandro.kotlin.util.annotation.NoArgs
 import com.alejandro.kotlin.entity.WebSiteEntity
 import com.alejandro.kotlin.util.data.Category
 import com.alejandro.kotlin.util.json.DtoEntityMapper
-import com.alejandro.kotlin.util.json.JsonToString
+import com.alejandro.kotlin.util.json.JsonMap
 import java.io.Serializable
 
 @NoArgs
@@ -35,7 +35,7 @@ data class WebSiteDto(
     }
 
     override fun toString(): String {
-        return JsonToString.buildJsonString(this)
+        return JsonMap.buildFromModel(this)
     }
 
     fun toEntity(): WebSiteEntity {

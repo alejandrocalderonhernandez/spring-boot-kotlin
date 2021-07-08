@@ -5,10 +5,12 @@ import com.alejandro.kotlin.dto.CompanyDto
 import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.model.ResponseModel
 import com.alejandro.kotlin.util.functions.AbstractFunctions
+import com.alejandro.kotlin.util.json.JsonMap
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping(path = ["v1/company"])
@@ -34,9 +36,11 @@ class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
     }
 
     @PostMapping
-    fun post(@RequestBody companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
+    fun post(@RequestParam company: String,
+             @RequestParam img: MultipartFile?): ResponseEntity<ResponseModel<CompanyDto>> {
+        val companyDTO = JsonMap.buildFromString(company, CompanyDto::class.java) as CompanyDto
         return ResponseEntity.ok(
-            this.companyBusiness.create(companyDto).let { successBuilder.build(it) }
+            this.companyBusiness.create(companyDTO, img).let { successBuilder.build(it) }
         )
     }
 
