@@ -6,9 +6,9 @@ import java.nio.file.Path
 
 interface FileComponent {
 
-    fun save(file: MultipartFile, name: String): Unit
+    fun save(file: MultipartFile, fileName: String): Unit
 
-    fun get(path: Path): Resource
+    fun get(fileName: String): Resource
 
     fun delete(fileName: String): Unit
 }

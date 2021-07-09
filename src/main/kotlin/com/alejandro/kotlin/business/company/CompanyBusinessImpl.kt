@@ -11,6 +11,8 @@ import com.alejandro.kotlin.util.normalize.Normalizer
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.web.ServerProperties
+import org.springframework.core.io.Resource
 import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -55,7 +57,7 @@ class CompanyBusinessImpl @Autowired constructor(
         if (img !== null) {
             val nameImg: String? = img.originalFilename?.let { Normalizer.normalizeImgName(it) }
             if (nameImg != null) {
-                entity.logo = MyConstants.IMG_BASE_URL + nameImg
+                entity.logo = nameImg
                 this.fileComponent.save(img, nameImg)
             }
         }
@@ -77,8 +79,10 @@ class CompanyBusinessImpl @Autowired constructor(
 
     override fun delete(id: Long): Unit {
         if (this.companyRepository.existsById(id)) {
-            logger.info("Deleted element with id: {}", id)
+            val img: String = this.companyRepository.getImg(id)
+            this.fileComponent.delete(img)
             this.companyRepository.deleteById(id)
+            logger.info("Deleted element with id: {}", id)
         } else {
             throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
         }
@@ -97,20 +101,16 @@ class CompanyBusinessImpl @Autowired constructor(
     override fun removeWebSites(id: Long, webSites: Collection<WebSiteDto>): CompanyDto {
         if (this.companyRepository.existsById(id)) {
             val toUpdate: CompanyEntity = this.companyRepository.getById(id)
-
-            println("before")
-            println(toUpdate.webSites.size)
-
-
             webSites.forEach {ws ->
                 toUpdate.removeWebSite(ws.toEntity())
             }
-
-            println("after")
-            println(toUpdate.webSites.size)
             toUpdate.updateWebSites()
             return this.companyRepository.save(toUpdate).toDto()
         }
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
+    }
+
+    override fun getLogo(nameImg: String): Resource {
+        return this.fileComponent.get(nameImg)
     }
 }

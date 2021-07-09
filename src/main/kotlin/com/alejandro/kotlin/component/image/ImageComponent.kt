@@ -18,8 +18,8 @@ class ImageComponent: FileComponent {
 
     private val logger = LoggerFactory.getLogger(FileComponent::class.java)
 
-    override fun save(file: MultipartFile, name: String): Unit {
-        val path: Path = Path.of(MyConstants.IMG_BASE_URL).resolve(name).toAbsolutePath()
+    override fun save(file: MultipartFile, nameImg: String): Unit {
+        val path: Path = Path.of(MyConstants.IMG_BASE_URL).resolve(nameImg).toAbsolutePath()
         try {
             Files.copy(file.inputStream, path)
         } catch (e: IOException) {
@@ -27,7 +27,8 @@ class ImageComponent: FileComponent {
         }
     }
 
-    override fun get(path: Path): Resource {
+    override fun get(nameImg: String): Resource {
+        val path: Path = Path.of(MyConstants.IMG_BASE_URL).resolve(nameImg).toAbsolutePath()
         try {
             return UrlResource(path.toUri())
         } catch (e: IOException) {

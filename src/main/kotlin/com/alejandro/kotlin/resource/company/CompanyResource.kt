@@ -7,7 +7,9 @@ import com.alejandro.kotlin.model.ResponseModel
 import com.alejandro.kotlin.util.functions.AbstractFunctions
 import com.alejandro.kotlin.util.json.JsonMap
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -74,5 +76,10 @@ class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
                          @RequestBody webSites: Collection<WebSiteDto>): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
             this.companyBusiness.removeWebSites(id, webSites).let { successBuilder.build(it) })
+    }
+
+    @GetMapping(path = ["img/{name}"], produces = [MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE])
+    fun getImg(@PathVariable name:String): ResponseEntity<Resource> {
+        return ResponseEntity.ok(this.companyBusiness.getLogo(name))
     }
 }

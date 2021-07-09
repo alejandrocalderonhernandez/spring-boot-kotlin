@@ -1,6 +1,5 @@
 package com.alejandro.kotlin.util.normalize
 
-import com.alejandro.kotlin.util.constants.MyConstants
 import java.util.*
 
 class Normalizer {
