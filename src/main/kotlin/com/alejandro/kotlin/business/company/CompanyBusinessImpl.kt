@@ -6,12 +6,11 @@ import com.alejandro.kotlin.dto.CompanyDto
 import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.repository.CompanyRepository
-import com.alejandro.kotlin.util.constants.MyConstants
+import com.alejandro.kotlin.util.FileUtil
 import com.alejandro.kotlin.util.normalize.Normalizer
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
@@ -51,22 +50,15 @@ class CompanyBusinessImpl @Autowired constructor(
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 
-    override fun create(element: CompanyDto, img: MultipartFile?): CompanyDto {
-        val entity:CompanyEntity = element.toEntity()
+    override fun create(element: CompanyDto): CompanyDto {
+        val entity: CompanyEntity = element.toEntity()
         entity.updateWebSites()
-        if (img !== null) {
-            val nameImg: String? = img.originalFilename?.let { Normalizer.normalizeImgName(it) }
-            if (nameImg != null) {
-                entity.logo = nameImg
-                this.fileComponent.save(img, nameImg)
-            }
-        }
         logger.info("Created: {}", entity.toString())
         return this.companyRepository.save(entity).toDto()
     }
 
     override fun update(id: Long, element: CompanyDto): CompanyDto {
-        if(this.companyRepository.existsById(id)) {
+        if (this.companyRepository.existsById(id)) {
             val toUpdate: CompanyEntity = this.companyRepository.getById(id)
             toUpdate.founder = element.founder
             toUpdate.logo = element.logo
@@ -110,7 +102,34 @@ class CompanyBusinessImpl @Autowired constructor(
         throw  NoSuchElementException(super.TYPE_ELEMENT + " not found")
     }
 
-    override fun getLogo(nameImg: String): Resource {
-        return this.fileComponent.get(nameImg)
+    override fun getLogo(id: Long): Resource {
+        if (this.companyRepository.existsById(id)) {
+            val imgName = this.companyRepository.getImg(id)
+            return this.fileComponent.get(imgName)
+        }
+        return  this.fileComponent.get("")
     }
+
+    override fun uploadLogo(logo: MultipartFile, id: Long): Boolean {
+        if (this.companyRepository.existsById(id)) {
+            val toUpdate = this.companyRepository.findById(id).get()
+            if(toUpdate.logo.isNotEmpty()) {
+                val file = FileUtil.toFile(toUpdate.logo)
+                if(FileUtil.exist(file)) {
+                   this.fileComponent.delete(toUpdate.logo)
+                }
+            }
+            logo.let {
+                val nameImg: String? = it.originalFilename?.let { Normalizer.normalizeImgName(it) }
+                if (nameImg != null) {
+                    toUpdate.logo = nameImg
+                    this.fileComponent.save(logo, nameImg)
+                    this.companyRepository.save(toUpdate)
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
 }

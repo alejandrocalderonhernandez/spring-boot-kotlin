@@ -7,11 +7,21 @@ import com.alejandro.kotlin.util.json.JsonMap
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 import java.time.LocalDate
+import javax.validation.constraints.NotBlank
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern
+import javax.validation.constraints.Size;
 
 @NoArgs
 data class CompanyDto(
     var id: Long,
+    @field:NotNull(message = "This field is mandatory")
+    @field:NotBlank(message = "This field cant be empty")
+    @field:Size(min = 2, max = 20, message = "The size have to length between 2 and 20 characters")
     var name: String,
+    @field:NotBlank(message = "This field cant be empty")
+    @field:Pattern(regexp = "\\b([A-Z].*)", message = "This field have to upper case")
     var founder: String,
     var logo: String,
     val foundationDate: LocalDate,

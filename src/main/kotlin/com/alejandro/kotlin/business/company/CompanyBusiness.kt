@@ -4,8 +4,10 @@ import com.alejandro.kotlin.business.common.AbstractService
 import com.alejandro.kotlin.dto.CompanyDto
 import com.alejandro.kotlin.dto.WebSiteDto
 import org.springframework.core.io.Resource
+import org.springframework.web.multipart.MultipartFile
 
 interface CompanyBusiness: AbstractService<CompanyDto, Long> {
+
     val TYPE_ELEMENT: String
         get() = "Company"
 
@@ -13,5 +15,7 @@ interface CompanyBusiness: AbstractService<CompanyDto, Long> {
 
     fun removeWebSites(id:Long, webSites: Collection<WebSiteDto>): CompanyDto
 
-    fun getLogo(nameImg: String): Resource
+    fun getLogo(id: Long): Resource
+
+    fun uploadLogo(logo: MultipartFile, id: Long): Boolean
 }

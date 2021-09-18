@@ -4,5 +4,6 @@ enum class Category {
     SOCIAL_NETWORK,
     SERVICES,
     STREAMING,
-    CLOUD_COMPUTING
+    CLOUD_COMPUTING,
+    DEVICES
 }

@@ -6,12 +6,18 @@ import com.alejandro.kotlin.util.data.Category
 import com.alejandro.kotlin.util.json.DtoEntityMapper
 import com.alejandro.kotlin.util.json.JsonMap
 import java.io.Serializable
+import javax.validation.constraints.Max
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 @NoArgs
 data class WebSiteDto(
     val id: Long,
+    @NotNull(message = "This field is mandatory")
+    @Size(min = 2, max = 20, message = "The size have to length between 2 and 20 characters")
     val name: String,
     val category: Category,
+    @Max(value = 150, message = "Maximum 150 characters")
     val description: String,
     var company: CompanyDto?
 ): Serializable {

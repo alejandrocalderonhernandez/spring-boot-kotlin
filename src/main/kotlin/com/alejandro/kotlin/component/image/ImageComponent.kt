@@ -1,6 +1,7 @@
 package com.alejandro.kotlin.component.image
 
 import com.alejandro.kotlin.component.common.FileComponent
+import com.alejandro.kotlin.util.FileUtil
 import com.alejandro.kotlin.util.constants.MyConstants
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
@@ -38,8 +39,8 @@ class ImageComponent: FileComponent {
     }
 
     override fun delete(fileName: String): Unit {
-     val file: File = Path.of(MyConstants.IMG_BASE_URL).resolve(fileName).toFile()
-        if (file.exists() && file.canRead()) {
+     val file = FileUtil.toFile(fileName)
+        if (FileUtil.exist(file)) {
            file.delete()
         } else {
             throw FileNotFoundException("Cant read file")

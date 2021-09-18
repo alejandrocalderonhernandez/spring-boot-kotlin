@@ -5,7 +5,6 @@ import com.alejandro.kotlin.dto.CompanyDto
 import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.model.ResponseModel
 import com.alejandro.kotlin.util.functions.AbstractFunctions
-import com.alejandro.kotlin.util.json.JsonMap
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import javax.validation.Valid
 
 @RestController
 @RequestMapping(path = ["v1/company"])
@@ -29,57 +29,73 @@ class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
     }
 
     @GetMapping
-    fun getByPage(@RequestParam page: Int, @RequestParam itemsPerPage: Int): ResponseEntity<ResponseModel<Page<CompanyDto>>> {
+    fun getByPage(
+        @RequestParam page: Int,
+        @RequestParam itemsPerPage: Int
+    ): ResponseEntity<ResponseModel<Page<CompanyDto>>> {
         return ResponseEntity.ok(
             ResponseModel(
                 200,
                 "Success",
-                this.companyBusiness.findByPage(page, itemsPerPage)))
+                this.companyBusiness.findByPage(page, itemsPerPage)
+            )
+        )
     }
 
     @PostMapping
-    fun post(@RequestParam company: String,
-             @RequestParam img: MultipartFile?): ResponseEntity<ResponseModel<CompanyDto>> {
-        val companyDTO = JsonMap.buildFromString(company, CompanyDto::class.java) as CompanyDto
+    fun post(@RequestBody @Valid companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
-            this.companyBusiness.create(companyDTO, img).let { successBuilder.build(it) }
+            this.companyBusiness.create(companyDto).let { successBuilder.build(it) }
         )
     }
 
     @PutMapping(path = ["{id}"])
-    fun put(@PathVariable id:Long, @RequestBody companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
+    fun put(@PathVariable id: Long, @RequestBody companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
             ResponseModel(
                 200,
                 "Success",
-                this.companyBusiness.update(id, companyDto)))
+                this.companyBusiness.update(id, companyDto)
+            )
+        )
     }
 
     @DeleteMapping(path = ["{id}"])
-    fun delete(@PathVariable id:Long): ResponseEntity<ResponseModel<Unit>> {
+    fun delete(@PathVariable id: Long): ResponseEntity<ResponseModel<Unit>> {
         return ResponseEntity.ok(
             ResponseModel(
                 200,
                 "Success",
-                this.companyBusiness.delete(id)))
+                this.companyBusiness.delete(id)
+            )
+        )
     }
 
     @PatchMapping(path = ["add/{id}"])
-    fun patchAddWebSites(@PathVariable id: Long,
-                         @RequestBody webSites: Collection<WebSiteDto>): ResponseEntity<ResponseModel<CompanyDto>> {
+    fun patchAddWebSites(
+        @PathVariable id: Long,
+        @RequestBody webSites: Collection<WebSiteDto>
+    ): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
             this.companyBusiness.addWebSites(id, webSites).let { successBuilder.build(it) })
     }
 
     @PatchMapping(path = ["remove/{id}"])
-    fun patchRemoveWebSites(@PathVariable id: Long,
-                         @RequestBody webSites: Collection<WebSiteDto>): ResponseEntity<ResponseModel<CompanyDto>> {
+    fun patchRemoveWebSites(
+        @PathVariable id: Long,
+        @RequestBody webSites: Collection<WebSiteDto>
+    ): ResponseEntity<ResponseModel<CompanyDto>> {
         return ResponseEntity.ok(
             this.companyBusiness.removeWebSites(id, webSites).let { successBuilder.build(it) })
     }
 
-    @GetMapping(path = ["img/{name}"], produces = [MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE])
-    fun getImg(@PathVariable name:String): ResponseEntity<Resource> {
-        return ResponseEntity.ok(this.companyBusiness.getLogo(name))
+    @GetMapping(path = ["img/{id}"], produces = [MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE])
+    fun getImg(@PathVariable id: Long): ResponseEntity<Resource> {
+        return ResponseEntity.ok(this.companyBusiness.getLogo(id))
+    }
+
+    @PutMapping(path = ["uploadImg/{id}"])
+    fun uploadLogo(@RequestParam logo: MultipartFile, @PathVariable id: Long): ResponseEntity<Boolean> {
+        return ResponseEntity.ok(this.companyBusiness.uploadLogo(logo, id))
     }
 }

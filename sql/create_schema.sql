@@ -1,5 +1,5 @@
 -- enum for categories
-create type category as enum ('social network', 'services', 'streaming', 'cloud computing');
+create type category as enum ('social network', 'services', 'streaming', 'cloud computing', 'devices');
 
 -- table company
 create table if not exists company(

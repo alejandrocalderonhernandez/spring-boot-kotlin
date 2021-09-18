@@ -10,7 +10,7 @@ abstract interface AbstractService<E: Serializable,ID> {
 
     fun findByPage(pageNumber: Int, elementForPage: Int): Page<E>
 
-    fun create(element: E, file: MultipartFile?): E
+    fun create(element: E): E
 
     fun update(id: ID, element: E): E
 
