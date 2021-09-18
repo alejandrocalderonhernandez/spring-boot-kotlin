@@ -14,7 +14,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 
-@Component(value = "img")
+@Component()
 class ImageComponent: FileComponent {
 
     private val logger = LoggerFactory.getLogger(FileComponent::class.java)

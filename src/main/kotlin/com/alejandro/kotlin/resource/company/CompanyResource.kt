@@ -12,11 +12,12 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.net.URI
 import javax.validation.Valid
 
 @RestController
 @RequestMapping(path = ["v1/company"])
-class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
+class CompanyResource(private val companyBusiness: CompanyBusiness) {
 
     val successBuilder =
         AbstractFunctions.ResponseBuilder<CompanyDto> { ResponseModel(200, "Success", it) }
@@ -43,10 +44,8 @@ class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
     }
 
     @PostMapping
-    fun post(@RequestBody @Valid companyDto: CompanyDto): ResponseEntity<ResponseModel<CompanyDto>> {
-        return ResponseEntity.ok(
-            this.companyBusiness.create(companyDto).let { successBuilder.build(it) }
-        )
+    fun post(@RequestBody @Valid companyDto: CompanyDto): ResponseEntity<CompanyDto> {
+        return ResponseEntity.created(URI(this.companyBusiness.create(companyDto))).build()
     }
 
     @PutMapping(path = ["{id}"])
@@ -90,7 +89,7 @@ class CompanyResource(@Autowired private val companyBusiness: CompanyBusiness) {
     }
 
     @GetMapping(path = ["img/{id}"], produces = [MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE])
-    fun getImg(@PathVariable id: Long): ResponseEntity<Resource> {
+    fun getLogo(@PathVariable id: Long): ResponseEntity<Resource> {
         return ResponseEntity.ok(this.companyBusiness.getLogo(id))
     }
 

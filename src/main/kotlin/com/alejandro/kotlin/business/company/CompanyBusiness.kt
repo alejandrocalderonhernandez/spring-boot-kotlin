@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile
 interface CompanyBusiness: AbstractService<CompanyDto, Long> {
 
     val TYPE_ELEMENT: String
-        get() = "Company"
+        get() = "company"
 
     fun addWebSites(id:Long, webSites: Collection<WebSiteDto>): CompanyDto
 

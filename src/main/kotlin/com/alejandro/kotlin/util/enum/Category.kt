@@ -1,4 +1,4 @@
-package com.alejandro.kotlin.util.data
+package com.alejandro.kotlin.util.enum
 
 enum class Category {
     SOCIAL_NETWORK,

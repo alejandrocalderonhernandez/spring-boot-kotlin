@@ -14,47 +14,47 @@ insert into company("name", founder, logo, foundation_date) values('Nintendo', '
 
 -- data for web sites
 insert into web_site(id_company, "name", category, description)
-values(1, 'Facebook', 'social network', 'Is an American online social media and social networking service owned by Facebook, Inc.');
+values(1, 'Facebook', 'SOCIAL_NETWORK', 'Is an American online social media and social networking service owned by Facebook, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(1, 'Instagram', 'social network', 'Is an American online social media and social networking service owned by Facebook, Inc.');
+values(1, 'Instagram', 'SOCIAL_NETWORK', 'Is an American online social media and social networking service owned by Facebook, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(1, 'Whatsapp', 'services', 'Is an American chat service owned by Facebook, Inc.');
+values(1, 'Whatsapp', 'SERVICES', 'Is an American chat service owned by Facebook, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(2, 'Gmail', 'services', 'Is an American email service owned by Google, Inc.');
+values(2, 'Gmail', 'SERVICES', 'Is an American email service owned by Google, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(2, 'Youtube', 'streaming', 'Is an American online streaming service owned by Google, Inc.');
+values(2, 'Youtube', 'STREAMING', 'Is an American online streaming service owned by Google, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(2, 'Goggle Cloud Platform', 'cloud computing', 'Is an American cloud computing service owned by Google, Inc.');
+values(2, 'Goggle Cloud Platform', 'CLOUD_COMPUTING', 'Is an American cloud computing service owned by Google, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(3, 'Amazon Store', 'services', 'Is an American store service owned by Amazon, Inc.');
+values(3, 'Amazon Store', 'SERVICES', 'Is an American store service owned by Amazon, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(3, 'AWS', 'cloud computing', 'Is an American online streaming service owned by Amazon, Inc.');
+values(3, 'AWS', 'CLOUD_COMPUTING', 'Is an American online streaming service owned by Amazon, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(3, 'Amazon Prime', 'cloud computing', 'Is an American online streaming service owned by Amazon, Inc.');
+values(3, 'Amazon Prime', 'CLOUD_COMPUTING', 'Is an American online streaming service owned by Amazon, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(4, 'Windows', 'services', 'Is an American SO owned by Microsoft, Inc.');
+values(4, 'Windows', 'SERVICES', 'Is an American SO owned by Microsoft, Inc.');
 insert into web_site(id_company, "name", category, description)
-values(4, 'Xbox', 'devices', 'Is a video console');
+values(4, 'Xbox', 'DEVICES', 'Is a video console');
 insert into web_site(id_company, "name", category, description)
-values(5, 'Iphone', 'devices', 'Is a product by apple');
+values(5, 'Iphone', 'DEVICES', 'Is a product by apple');
 insert into web_site(id_company, "name", category, description)
-values(5, 'Mac', 'devices', 'Is a product by apple');
+values(5, 'Mac', 'DEVICES', 'Is a product by apple');
 insert into web_site(id_company, "name", category, description)
-values(5, 'Ipad', 'devices', 'Is a product by apple');
+values(5, 'Ipad', 'DEVICES', 'Is a product by apple');
 insert into web_site(id_company, "name", category, description)
-values(6, 'TikTok', 'services', 'Is a service streaming');
+values(6, 'TikTok', 'STREAMING', 'Is a service streaming');
 insert into web_site(id_company, "name", category, description)
-values(7, 'OnlyFans', 'services', 'Is a service streaming');
+values(7, 'OnlyFans', 'SERVICES', 'Is a service streaming');
 insert into web_site(id_company, "name", category, description)
-values(8, 'Java', 'services', 'Is a language program');
+values(8, 'Java', 'SERVICES', 'Is a language program');
 insert into web_site(id_company, "name", category, description)
-values(8, 'OracleCloud', 'cloud computing', 'Is a cloud computing');
+values(8, 'OracleCloud', 'CLOUD_COMPUTING', 'Is a cloud computing');
 insert into web_site(id_company, "name", category, description)
-values(9, 'Cisco networks', 'services', 'Is a service networks');
+values(9, 'Cisco networks', 'SERVICES', 'Is a service networks');
 insert into web_site(id_company, "name", category, description)
-values(10, 'Smartphone', 'devices', 'Is a communication devices');
+values(10, 'Smartphone', 'DEVICES', 'Is a communication devices');
 insert into web_site(id_company, "name", category, description)
-values(11, 'Playstation', 'devices', 'Is a video console');
+values(11, 'Playstation', 'DEVICES', 'Is a video console');
 insert into web_site(id_company, "name", category, description)
-values(12, 'Nintendo', 'devices', 'Is a video console');
+values(12, 'Nintendo', 'DEVICES', 'Is a video console');
 

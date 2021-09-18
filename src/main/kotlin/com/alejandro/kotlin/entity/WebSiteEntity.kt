@@ -1,7 +1,7 @@
 package com.alejandro.kotlin.entity
 
 import com.alejandro.kotlin.util.annotation.NoArgs
-import com.alejandro.kotlin.util.data.Category
+import com.alejandro.kotlin.util.enum.Category
 import com.alejandro.kotlin.util.json.JsonMap
 import java.io.Serializable
 import javax.persistence.*
@@ -15,9 +15,9 @@ data class WebSiteEntity(
         val id: Long,
         @Column
         val name: String,
-        @Column()
+        @Column(columnDefinition = "category")
         @Enumerated(value = EnumType.STRING)
-        val category: Category,
+        var category: Category,
         @Column
         val description: String,
         @ManyToOne

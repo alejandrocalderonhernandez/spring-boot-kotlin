@@ -55,15 +55,15 @@ data class CompanyEntity(
         return DtoEntityMapper.mapTo(this, CompanyDto::class.java) as CompanyDto
     }
 
-    fun addWebSite(webSite: WebSiteEntity): Unit {
+    fun addWebSite(webSite: WebSiteEntity) {
         this.webSites.add(webSite)
     }
 
-    fun removeWebSite(webSite: WebSiteEntity): Unit {
-        this.webSites.remove(webSite)
+    fun removeWebSite(webSite: WebSiteEntity) {
+        this.webSites.removeIf{ it.name == webSite.name }
     }
 
-    fun updateWebSites(): Unit {
+    fun updateWebSites() {
         this.webSites.forEach{ws -> ws.company = this}
     }
 }

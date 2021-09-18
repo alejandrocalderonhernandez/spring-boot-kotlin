@@ -1,6 +1,3 @@
--- enum for categories
-create type category as enum ('social network', 'services', 'streaming', 'cloud computing', 'devices');
-
 -- table company
 create table if not exists company(
  id serial primary key,
@@ -19,9 +16,10 @@ create table if not exists web_site(
  id serial primary key,
  id_company bigint,
  "name" varchar(32) not null unique,
- category category not null,
+ category varchar(32) not null,
  description text,
  constraint fk_company
    foreign key(id_company)
      references company(id)
+        on delete cascade
 );
