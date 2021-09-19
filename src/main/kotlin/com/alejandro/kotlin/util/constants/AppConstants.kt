@@ -3,7 +3,6 @@ package com.alejandro.kotlin.util.constants
 class AppConstants {
 
     companion object {
-        const val IMG_BASE_URL = "files/img/"
         const val USERNAME = "admin"
         const val DEFAULT_LOGO = "default.jpg"
         const val ENCODED_PASSWORD = "\$2a\$10\$V3It2wLCf4AoFRuPBFBARePFGg2w7s430rK5YIR/Ng7/ErXd2mVhS"

@@ -4,6 +4,7 @@ import com.alejandro.kotlin.component.common.FileComponent
 import com.alejandro.kotlin.util.FileUtil
 import com.alejandro.kotlin.util.constants.AppConstants
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResource
 import org.springframework.stereotype.Component
@@ -13,13 +14,13 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 
-@Component()
-class ImageComponent: FileComponent {
+@Component
+class ImageComponent(@Value("\${FILE_PATH}") private val filePath: String): FileComponent{
 
     private val logger = LoggerFactory.getLogger(FileComponent::class.java)
 
     override fun save(file: MultipartFile, nameImg: String): Unit {
-        val path: Path = Path.of(AppConstants.IMG_BASE_URL).resolve(nameImg).toAbsolutePath()
+        val path: Path = Path.of(this.filePath).resolve(nameImg).toAbsolutePath()
         try {
             Files.copy(file.inputStream, path)
         } catch (e: IOException) {
@@ -28,10 +29,10 @@ class ImageComponent: FileComponent {
     }
 
     override fun get(nameImg: String): Resource {
-        val path: Path = Path.of(AppConstants.IMG_BASE_URL).resolve(nameImg).toAbsolutePath()
-        val defaultPath: Path = Path.of(AppConstants.IMG_BASE_URL).resolve(AppConstants.DEFAULT_LOGO).toAbsolutePath()
+        val path: Path = Path.of(this.filePath).resolve(nameImg).toAbsolutePath()
+        val defaultPath: Path = Path.of(this.filePath).resolve(AppConstants.DEFAULT_LOGO).toAbsolutePath()
         try {
-            if (FileUtil.exist(FileUtil.toFile(nameImg))) {
+            if (FileUtil.exist(Path.of(this.filePath).resolve(nameImg).toFile())) {
                 return UrlResource(path.toUri())
             }
             return UrlResource(defaultPath.toUri())
@@ -42,8 +43,8 @@ class ImageComponent: FileComponent {
         }
     }
 
-    override fun delete(fileName: String): Unit {
-     val file = FileUtil.toFile(fileName)
+    override fun delete(nameImg: String): Unit {
+     val file = Path.of(this.filePath).resolve(nameImg).toFile()
         if (FileUtil.exist(file)) {
            file.delete()
         } else {

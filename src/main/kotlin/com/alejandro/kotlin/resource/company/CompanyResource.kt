@@ -6,6 +6,7 @@ import com.alejandro.kotlin.dto.WebSiteDto
 import com.alejandro.kotlin.model.ResponseModel
 import com.alejandro.kotlin.util.functions.AbstractFunctions
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.http.MediaType
@@ -19,7 +20,7 @@ import javax.validation.Valid
 @RestController
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = ["v1/company"])
-class CompanyResource(private val companyBusiness: CompanyBusiness) {
+class CompanyResource(private val companyBusiness: CompanyBusiness){
 
     val successBuilder =
         AbstractFunctions.ResponseBuilder<CompanyDto> { ResponseModel(200, "Success", it) }

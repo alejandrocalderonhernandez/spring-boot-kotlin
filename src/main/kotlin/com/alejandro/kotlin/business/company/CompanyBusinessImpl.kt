@@ -13,11 +13,13 @@ import com.alejandro.kotlin.util.exception.DuplicatedNameException
 import com.alejandro.kotlin.util.exception.InvalidLogoException
 import com.alejandro.kotlin.util.normalize.Normalizer
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Path
 import java.util.stream.Collectors
 
 @Service
@@ -25,7 +27,8 @@ import java.util.stream.Collectors
 class CompanyBusinessImpl constructor(
     val companyRepository: CompanyRepository,
     val webSiteRepository: WebSiteRepository,
-    val fileComponent: FileComponent
+    val fileComponent: FileComponent,
+    @Value("\${FILE_PATH}") private val filePath: String
 ) : CompanyBusiness {
 
     private val logger = LoggerFactory.getLogger(SpringKotlinExampleApplication::class.java)
@@ -124,7 +127,7 @@ class CompanyBusinessImpl constructor(
         if (this.companyRepository.existsById(id)) {
             val toUpdate = this.companyRepository.findById(id).get()
             if (toUpdate.logo.isNotEmpty()) {
-                val file = FileUtil.toFile(toUpdate.logo)
+                val file = Path.of(this.filePath).resolve(toUpdate.logo).toFile()
                 if (FileUtil.exist(file)) {
                     this.fileComponent.delete(toUpdate.logo)
                 }
