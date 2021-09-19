@@ -8,7 +8,7 @@ import com.alejandro.kotlin.entity.CompanyEntity
 import com.alejandro.kotlin.repository.CompanyRepository
 import com.alejandro.kotlin.repository.WebSiteRepository
 import com.alejandro.kotlin.util.FileUtil
-import com.alejandro.kotlin.util.constants.MyConstants
+import com.alejandro.kotlin.util.constants.AppConstants
 import com.alejandro.kotlin.util.exception.DuplicatedNameException
 import com.alejandro.kotlin.util.exception.InvalidLogoException
 import com.alejandro.kotlin.util.normalize.Normalizer
@@ -110,14 +110,14 @@ class CompanyBusinessImpl constructor(
             val imgName = this.companyRepository.getImg(id)
             return this.fileComponent.get(imgName)
         }
-        return  this.fileComponent.get("")
+        throw NoSuchElementException("Image id not found")
     }
 
     override fun uploadLogo(logo: MultipartFile, id: Long): Boolean {
 
         val spliced = logo.originalFilename?.split(".")
         val extName = spliced?.get(1)
-        if (!MyConstants.LOGO_EXTENSIONS.contains(extName)) {
+        if (!AppConstants.LOGO_EXTENSIONS.contains(extName)) {
             throw InvalidLogoException(extName!!)
         }
 
