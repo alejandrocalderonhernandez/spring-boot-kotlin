@@ -18,13 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 )
 class SecurityConf(): WebSecurityConfigurerAdapter() {
 
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
-        http
-            .csrf().disable()
-            .httpBasic()
-
-    }
 
     @Throws(java.lang.Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
@@ -33,6 +26,18 @@ class SecurityConf(): WebSecurityConfigurerAdapter() {
             .withUser(AppConstants.USERNAME)
             .password(AppConstants.ENCODED_PASSWORD)
             .roles("USER")
+    }
+
+    @Throws(java.lang.Exception::class)
+    override fun configure(auth: HttpSecurity) {
+        http
+            .csrf().disable()
+            .httpBasic()
+            .and()
+            .logout()
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/login")
+            .invalidateHttpSession(true)
     }
 
     @Bean

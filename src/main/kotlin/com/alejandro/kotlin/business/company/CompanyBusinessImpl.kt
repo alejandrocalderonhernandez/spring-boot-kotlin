@@ -27,8 +27,7 @@ import java.util.stream.Collectors
 class CompanyBusinessImpl constructor(
     val companyRepository: CompanyRepository,
     val webSiteRepository: WebSiteRepository,
-    val fileComponent: FileComponent,
-    @Value("\${FILE_PATH}") private val filePath: String
+    val fileComponent: FileComponent
 ) : CompanyBusiness {
 
     private val logger = LoggerFactory.getLogger(SpringKotlinExampleApplication::class.java)
@@ -127,7 +126,7 @@ class CompanyBusinessImpl constructor(
         if (this.companyRepository.existsById(id)) {
             val toUpdate = this.companyRepository.findById(id).get()
             if (toUpdate.logo.isNotEmpty()) {
-                val file = Path.of(this.filePath).resolve(toUpdate.logo).toFile()
+                val file = Path.of(AppConstants.FILE_PATH).resolve(toUpdate.logo).toFile()
                 if (FileUtil.exist(file)) {
                     this.fileComponent.delete(toUpdate.logo)
                 }

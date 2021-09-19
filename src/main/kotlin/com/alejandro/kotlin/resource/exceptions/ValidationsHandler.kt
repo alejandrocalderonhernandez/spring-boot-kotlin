@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class ValidationsHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-        fun  handleValidationExceptions(
+        fun handleValidationExceptions(
              ex: MethodArgumentNotValidException): Map<String, String> {
        val errors =  HashMap<String, String>()
         ex.bindingResult.allErrors.forEach { r ->
-            println(ex.message)
             val field = r as FieldError
             field.let {
                 val fieldName = it.field

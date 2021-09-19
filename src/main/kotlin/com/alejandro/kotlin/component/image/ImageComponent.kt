@@ -15,12 +15,12 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 @Component
-class ImageComponent(@Value("\${FILE_PATH}") private val filePath: String): FileComponent{
+class ImageComponent(): FileComponent{
 
     private val logger = LoggerFactory.getLogger(FileComponent::class.java)
 
     override fun save(file: MultipartFile, nameImg: String): Unit {
-        val path: Path = Path.of(this.filePath).resolve(nameImg).toAbsolutePath()
+        val path: Path = Path.of(AppConstants.FILE_PATH).resolve(nameImg).toAbsolutePath()
         try {
             Files.copy(file.inputStream, path)
         } catch (e: IOException) {
@@ -29,10 +29,10 @@ class ImageComponent(@Value("\${FILE_PATH}") private val filePath: String): File
     }
 
     override fun get(nameImg: String): Resource {
-        val path: Path = Path.of(this.filePath).resolve(nameImg).toAbsolutePath()
-        val defaultPath: Path = Path.of(this.filePath).resolve(AppConstants.DEFAULT_LOGO).toAbsolutePath()
+        val path: Path = Path.of(AppConstants.FILE_PATH).resolve(nameImg).toAbsolutePath()
+        val defaultPath: Path = Path.of(AppConstants.FILE_PATH).resolve(AppConstants.DEFAULT_LOGO).toAbsolutePath()
         try {
-            if (FileUtil.exist(Path.of(this.filePath).resolve(nameImg).toFile())) {
+            if (FileUtil.exist(Path.of(AppConstants.FILE_PATH).resolve(nameImg).toFile())) {
                 return UrlResource(path.toUri())
             }
             return UrlResource(defaultPath.toUri())
@@ -44,7 +44,7 @@ class ImageComponent(@Value("\${FILE_PATH}") private val filePath: String): File
     }
 
     override fun delete(nameImg: String): Unit {
-     val file = Path.of(this.filePath).resolve(nameImg).toFile()
+     val file = Path.of(AppConstants.FILE_PATH).resolve(nameImg).toFile()
         if (FileUtil.exist(file)) {
            file.delete()
         } else {
